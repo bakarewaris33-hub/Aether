@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vesper • AI Workspace</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&amp;family=Space+Grotesk:wght@500;600&amp;display=swap');
+        
+        :root {
+            --primary: #6366f1;
+        }
+        
+        body {
+            font-family: 'Inter', system_ui, sans-serif;
+        }
+        
+        .font-display {
+            font-family: 'Space Grotesk', 'Inter', sans-serif;
+            font-weight: 600;
+        }
+
+        .glass {
+            background: rgba(255,255,255, 0.08);
+            backdrop-filter: blur(20px);
+        }
+
+        .nav-active {
+            color: white;
+            position: relative;
+        }
+        
+        .nav-active:after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(to right, #6366f1, transparent);
+        }
+
+        .section-header {
+            font-size: 3.2rem;
+            line-height: 1.05;
+            font-weight: 700;
+            letter-spacing: -.04em;
+        }
+
+        .modern-card {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .modern-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 25px 50px -12px rgb(0 0 0 / 0.25);
+        }
+
+        .gradient-text {
+            background: linear-gradient(90deg, #6366f1, #a855f7);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .nav-scrolled {
+            background: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(20px);
+        }
+
+        .task-item {
+            transition: all 0.2s ease;
+        }
+
+        .metric-value {
+            font-variant-numeric: tabular-nums;
+        }
+
+        .hero-grid {
+            background-image: url('data:image/svg+xml,%3Csvg width=%2260%22 height=%2260%22 viewBox=%220 0 60 60%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cg fill-rule=%22evenodd%22%3E%3Cpath fill=%22%231e2937%22 fill-opacity=%22007%22 d=%22M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-10V8h-2v16h-4v2h4v4h2v-4h4v-2h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 6v-4H4v4H0v2h4v4h2V8h4V6H6z%22/%3E%3C/g%3E%3C/svg%27');
+            background-size: 60px 60px;
+        }
+    </style>
+</head>
+<body class="bg-slate-950 text-slate-200">
+    <!-- Navbar -->
+    <nav id="navbar" class="fixed top-0 left-0 right-0 z-50 transition-all duration-300 bg-slate-950 border-b border-slate-800">
+        <div class="max-w-screen-2xl mx-auto">
+            <div class="px-8 py-5 flex items-center justify-between">
+                <div class="flex items-center gap-x-3">
+                    <div class="w-9 h-9 bg-indigo-600 rounded-2xl flex items-center justify-center">
+                        <i class="fa-solid fa-infinity text-white text-2xl"></i>
+                    </div>
+                    <div>
+                        <span class="font-display text-3xl font-semibold tracking-tighter">vesper</span>
+                    </div>
+                </div>
+                
+                <!-- Desktop Menu -->
+                <div class="hidden md:flex items-center gap-x-9 text-sm">
+                    <a href="#features" class="hover:text-white transition-colors">Features</a>
+                    <a href="#demo" class="hover:text-white transition-colors">Demo</a>
+                    <a href="#pricing" class="hover:text-white transition-colors">Pricing</a>
+                </div>
+                
+                <div class="hidden md:flex items-center gap-x-3">
+                    <button onclick="showLoginModal()" 
+                            class="px-5 py-2.5 text-sm font-medium hover:bg-slate-900 transition-colors rounded-3xl">
+                        Log in
+                    </button>
+                    <button onclick="startFreeTrial()" 
+                            class="px-6 py-2.5 bg-white text-slate-900 text-sm font-semibold rounded-3xl hover:bg-slate-100 transition-all active:scale-[0.985]">
+                        Start free trial
+                    </button>
+                </div>
+                
+                <!-- Mobile Menu -->
+                <div class="md:hidden flex items-center gap-x-2">
+                    <button onclick="startFreeTrial()" 
+                            class="px-4 py-2 bg-white text-slate-900 text-sm font-semibold rounded-3xl">
+                        Try free
+                    </button>
+                    <button id="mobile-menu-btn" class="w-10 h-10 flex items-center justify-center text-xl">
+                        <i class="fa-solid fa-bars"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <div class="pt-20 pb-16 px-6 max-w-screen-2xl mx-auto">
+        <div class="flex flex-col lg:flex-row items-center gap-12 pt-8">
+            <div class="lg:w-1/2 max-w-xl">
+                <div class="inline-flex items-center gap-x-2 bg-slate-900 border border-slate-800 px-4 h-8 rounded-3xl mb-6">
+                    <div class="w-2 h-2 bg-emerald-400 rounded-full animate-pulse"></div>
+                    <span class="text-xs font-medium tracking-wider">NOW WITH AI v3.1</span>
+                </div>
+                
+                <h1 class="text-6xl lg:text-7xl leading-none font-display font-bold tracking-tighter">
+                    Work that<br>
+                    <span class="gradient-text">feels effortless.</span>
+                </h1>
+                
+                <p class="mt-6 text-xl text-slate-400 max-w-md">
+                    The intelligent workspace that understands your workflow and adapts to you.
+                </p>
+                
+                <div class="flex items-center gap-x-4 mt-8">
+                    <button onclick="startFreeTrial()" 
+                            class="px-8 py-4 bg-indigo-600 hover:bg-indigo-500 transition-all text-white font-semibold rounded-3xl flex items-center gap-x-3 active:scale-[0.985]">
+                        <span>Get started free</span>
+                        <i class="fa-solid fa-arrow-right"></i>
+                    </button>
+                    <button onclick="document.getElementById('demo').scrollIntoView({ behavior: 'smooth' })" 
+                            class="px-6 py-4 border border-slate-700 hover:bg-slate-900 transition-colors font-medium rounded-3xl flex items-center gap-x-2">
+                        <i class="fa-solid fa-play mr-1"></i>
+                        <span>Watch demo</span>
+                    </button>
+                </div>
+                
+                <div class="flex items-center gap-x-5 mt-8">
+                    <div class="flex -space-x-2">
+                        <img src="https://i.pravatar.cc/24?img=28" class="w-6 h-6 rounded-full ring-2 ring-slate-950">
+                        <img src="https://i.pravatar.cc/24?img=32" class="w-6 h-6 rounded-full ring-2 ring-slate-950">
+                        <img src="https://i.pravatar.cc/24?img=47" class="w-6 h-6 rounded-full ring-2 ring-slate-950">
+                    </div>
+                    <span class="text-xs text-slate-400">Joined by 47,291 teams today</span>
+                </div>
+            </div>
+            
+            <div class="lg:w-1/2 relative">
+                <div class="relative bg-slate-900 border border-slate-800 rounded-3xl p-2 shadow-2xl">
+                    <img src="https://picsum.photos/id/1015/800/600" class="rounded-3xl w-full shadow-inner" alt="Vesper workspace preview">
+                    <div class="absolute inset-0 bg-gradient-to-br from-slate-900/30 to-transparent rounded-3xl"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Features -->
+    <div id="features" class="max-w-screen-2xl mx-auto px-6 py-16 border-t border-slate-800">
+        <div class="text-center mb-12">
+            <span class="text-indigo-400 text-sm font-semibold tracking-widest">POWERFUL FEATURES</span>
+            <h2 class="text-5xl font-display font-bold tracking-tighter mt-3">Built for modern teams</h2>
+        </div>
+        
+        <div class="grid md:grid-cols-3 gap-6">
+            <div class="modern-card bg-slate-900 border border-slate-800 p-7 rounded-3xl">
+                <div class="w-11 h-11 flex items-center justify-center bg-indigo-950 rounded-2xl mb-5">
+                    <i class="fa-solid fa-brain text-indigo-400 text-2xl"></i>
+                </div>
+                <h3 class="font-semibold text-2xl">AI Copilot</h3>
+                <p class="mt-3 text-slate-400">Your personal AI assistant that writes, summarizes, and prioritizes your work automatically.</p>
+            </div>
+            
+            <div class="modern-card bg-slate-900 border border-slate-800 p-7 rounded-3xl">
+                <div class="w-11 h-11 flex items-center justify-center bg-indigo-950 rounded-2xl mb-5">
+                    <i class="fa-solid fa-sync text-indigo-400 text-2xl"></i>
+                </div>
+                <h3 class="font-semibold text-2xl">Smart Sync</h3>
+                <p class="mt-3 text-slate-400">Real-time collaboration with zero conflicts across all your devices and team members.</p>
+            </div>
+            
+            <div class="modern-card bg-slate-900 border border-slate-800 p-7 rounded-3xl">
+                <div class="w-11 h-11 flex items-center justify-center bg-indigo-950 rounded-2xl mb-5">
+                    <i class="fa-solid fa-chart-line text-indigo-400 text-2xl"></i>
+                </div>
+                <h3 class="font-semibold text-2xl">Focus Analytics</h3>
+                <p class="mt-3 text-slate-400">Deep insights into your productivity patterns with actionable recommendations.</p>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Interactive Demo -->
+    <div id="demo" class="max-w-screen-2xl mx-auto px-6 py-16 border-t border-slate-800 bg-slate-900">
+        <div class="max-w-2xl mx-auto text-center mb-10">
+            <span class="px-4 py-1 bg-slate-800 text-xs font-medium rounded-3xl">LIVE DEMO</span>
+            <h2 class="text-4xl font-display font-bold tracking-tight mt-3">Try the workspace</h2>
+            <p class="text-slate-400 mt-3">Add tasks below. Everything saves automatically.</p>
+        </div>
+        
+        <!-- Interactive Task Demo -->
+        <div class="max-w-xl mx-auto">
+            <div class="bg-slate-950 border border-slate-800 rounded-3xl p-1 shadow-inner">
+                <div class="flex items-center px-6 pt-5 pb-3">
+                    <div class="flex-1">
+                        <div class="flex items-center gap-x-3">
+                            <h4 class="font-semibold">Today's Focus</h4>
+                            <span id="task-count" class="text-xs px-2.5 py-1 bg-slate-800 rounded-2xl">0 tasks</span>
+                        </div>
+                    </div>
+                    <button onclick="addNewTask()" 
+                            class="flex items-center gap-x-2 px-4 py-2 text-sm bg-indigo-600 hover:bg-indigo-500 transition-colors rounded-3xl text-white font-medium">
+                        <i class="fa-solid fa-plus text-xs"></i>
+                        <span class="hidden sm:inline">Add task</span>
+                    </button>
+                </div>
+                
+                <div id="task-list" class="px-2 pb-4 max-h-[280px] overflow-auto">
+                    <!-- Tasks populated by JS -->
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Pricing -->
+    <div id="pricing" class="max-w-screen-2xl mx-auto px-6 py-20">
+        <div class="text-center mb-10">
+            <h2 class="font-display text-5xl font-bold tracking-tighter">Simple pricing</h2>
+        </div>
+        
+        <div class="grid md:grid-cols-3 gap-6 max-w-5xl mx-auto">
+            <!-- Pricing cards -->
+            <div class="border border-slate-700 p-8 rounded-3xl">
+                <div class="font-semibold">Starter</div>
+                <div class="mt-6 flex items-baseline">
+                    <span class="text-5xl font-display font-bold">$0</span>
+                </div>
+                <div class="text-xs text-slate-400 mt-1">Forever free</div>
+                <button onclick="startFreeTrial()" class="mt-8 w-full py-3.5 border border-slate-700 hover:bg-slate-900 text-sm rounded-3xl font-medium">Get started</button>
+            </div>
+            
+            <div class="border border-indigo-600 bg-slate-900 p-8 rounded-3xl relative">
+                <div class="absolute -top-3 right-6 px-4 py-1 text-xs bg-indigo-600 rounded-3xl font-medium">Most popular</div>
+                <div class="font-semibold">Pro</div>
+                <div class="mt-6 flex items-baseline">
+                    <span class="text-5xl font-display font-bold">$12</span>
+                    <span class="text-slate-400 ml-1">/user/mo</span>
+                </div>
+                <button onclick="startFreeTrial()" class="mt-8 w-full py-3.5 bg-white text-slate-900 hover:bg-slate-100 transition-all text-sm rounded-3xl font-semibold">Start 14-day trial</button>
+            </div>
+            
+            <div class="border border-slate-700 p-8 rounded-3xl">
+                <div class="font-semibold">Enterprise</div>
+                <div class="mt-6 flex items-baseline">
+                    <span class="text-5xl font-display font-bold">$29</span>
+                    <span class="text-slate-400 ml-1">/user/mo</span>
+                </div>
+                <button onclick="contactSales()" class="mt-8 w-full py-3.5 border border-slate-700 hover:bg-slate-900 text-sm rounded-3xl font-medium">Talk to sales</button>
+            </div>
+        </div>
+    </div>
+    
+    <footer class="border-t border-slate-800 py-8 px-6 max-w-screen-2xl mx-auto text-center">
+        <div class="text-sm text-slate-500">© 2025 Vesper. All rights reserved.</div>
+    </footer>
+
+    <!-- Login Modal -->
+    <div id="login-modal" onclick="hideLoginModal()" class="hidden fixed inset-0 bg-black/70 z-50 flex items-center justify-center">
+        <div onclick="event.stopImmediatePropagation()" class="bg-slate-900 border border-slate-700 w-full max-w-sm mx-4 rounded-3xl p-8">
+            <h3 class="font-display text-3xl">Welcome back</h3>
+            <div class="mt-8 space-y-4">
+                <div>
+                    <input type="email" value="maya@acme.co" class="w-full bg-slate-950 border border-slate-700 px-5 py-3.5 text-sm rounded-3xl focus:outline-none">
+                </div>
+                <div>
+                    <input type="password" value="demo2025" class="w-full bg-slate-950 border border-slate-700 px-5 py-3.5 text-sm rounded-3xl focus:outline-none">
+                </div>
+                <button onclick="loginUser()" class="mt-4 w-full py-4 bg-white text-slate-900 font-semibold rounded-3xl">Sign in</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        // Tailwind script
+        function initializeTailwind() {
+            document.documentElement.style.setProperty('--accent', '#6366f1');
+        }
+        
+        // Navbar scroll effect
+        function initNavbar() {
+            const navbar = document.getElementById('navbar');
+            
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 20) {
+                    navbar.classList.add('nav-scrolled');
+                } else {
+                    navbar.classList.remove('nav-scrolled');
+                }
+            });
+        }
+        
+        // Task Management System
+        let tasks = [];
+        
+        function loadTasks() {
+            const savedTasks = localStorage.getItem('vesper_tasks');
+            if (savedTasks) {
+                tasks = JSON.parse(savedTasks);
+            } else {
+                // Default tasks
+                tasks = [
+                    { id: 1, text: "Finalize Q4 product roadmap", completed: false },
+                    { id: 2, text: "Review design system updates", completed: true },
+                    { id: 3, text: "Prepare investor pitch deck", completed: false }
+                ];
+                saveTasks();
+            }
+            renderTasks();
+        }
+        
+        function saveTasks() {
+            localStorage.setItem('vesper_tasks', JSON.stringify(tasks));
+        }
+        
+        function renderTasks() {
+            const container = document.getElementById('task-list');
+            container.innerHTML = '';
+            
+            if (tasks.length === 0) {
+                const empty = document.createElement('div');
+                empty.className = 'px-5 py-8 text-center text-slate-500 text-sm';
+                empty.innerHTML = 'No tasks yet. Add one above!';
+                container.appendChild(empty);
+                return;
+            }
+            
+            tasks.forEach(task => {
+                const taskEl = document.createElement('div');
+                taskEl.className = `task-item flex items-center gap-x-3 px-5 py-[13px] mx-2 rounded-3xl hover:bg-slate-900 group ${task.completed ? 'opacity-75' : ''}`;
+                
+                taskEl.innerHTML = `
+                    <div onclick="toggleTask(${task.id}, event)" class="w-5 h-5 flex-shrink-0 border ${task.completed ? 'bg-emerald-500 border-emerald-500' : 'border-slate-600'} rounded-xl flex items-center justify-center cursor-pointer">
+                        ${task.completed ? '<i class="fa-solid fa-check text-white text-xs"></i>' : ''}
+                    </div>
+                    <div class="flex-1 text-sm ${task.completed ? 'line-through text-slate-500' : ''}">${task.text}</div>
+                    <button onclick="deleteTask(${task.id}, event)" class="opacity-0 group-hover:opacity-100 text-slate-400 hover:text-red-400 transition-colors px-1">
+                        <i class="fa-solid fa-times text-sm"></i>
+                    </button>
+                `;
+                
+                container.appendChild(taskEl);
+            });
+            
+            // Update count
+            document.getElementById('task-count').innerHTML = `${tasks.length} tasks`;
+        }
+        
+        function addNewTask() {
+            const text = prompt('What task would you like to add?');
+            if (!text || text.trim() === '') return;
+            
+            const newTask = {
+                id: Date.now(),
+                text: text.trim(),
+                completed: false
+            };
+            
+            tasks.unshift(newTask);
+            saveTasks();
+            renderTasks();
+        }
+        
+        function toggleTask(id, e) {
+            e.stopImmediatePropagation();
+            tasks = tasks.map(task => {
+                if (task.id === id) {
+                    return { ...task, completed: !task.completed };
+                }
+                return task;
+            });
+            saveTasks();
+            renderTasks();
+        }
+        
+        function deleteTask(id, e) {
+            e.stopImmediatePropagation();
+            tasks = tasks.filter(task => task.id !== id);
+            saveTasks();
+            renderTasks();
+        }
+        
+        function initDemo() {
+            loadTasks();
+            
+            // Add keyboard support for demo
+            document.addEventListener('keydown', function(e) {
+                if (e.key === "/" && document.activeElement.tagName === "BODY") {
+                    e.preventDefault();
+                    addNewTask();
+                }
+            });
+        }
+        
+        // Modal functions
+        function showLoginModal() {
+            document.getElementById('login-modal').classList.remove('hidden');
+            document.getElementById('login-modal').classList.add('flex');
+        }
+        
+        function hideLoginModal() {
+            const modal = document.getElementById('login-modal');
+            modal.classList.remove('flex');
+            modal.classList.add('hidden');
+        }
+        
+        function loginUser() {
+            const modal = document.getElementById('login-modal');
+            modal.classList.remove('flex');
+            modal.classList.add('hidden');
+            
+            // Success toast
+            showToast("Welcome back! You're now signed in.");
+        }
+        
+        function startFreeTrial() {
+            const btns = document.querySelectorAll('button');
+            showToast("Thank you! Your 14-day Pro trial has started.");
+            
+            // Demo: Add a welcome task
+            setTimeout(() => {
+                if (!tasks.find(t => t.text.includes("Explore AI features"))) {
+                    tasks.unshift({
+                        id: Date.now(),
+                        text: "Explore new AI features",
+                        completed: false
+                    });
+                    saveTasks();
+                    renderTasks();
+                }
+            }, 1500);
+        }
+        
+        function contactSales() {
+            showToast("Our sales team will contact you shortly.");
+        }
+        
+        function showToast(message) {
+            const toast = document.createElement('div');
+            toast.className = `fixed bottom-6 left-1/2 -translate-x-1/2 px-6 py-3.5 bg-slate-800 border border-slate-700 text-sm rounded-3xl flex items-center gap-x-3 shadow-xl`;
+            toast.innerHTML = `
+                <span>${message}</span>
+            `;
+            
+            document.body.appendChild(toast);
+            
+            setTimeout(() => {
+                toast.style.transition = 'all 0.3s ease';
+                toast.style.opacity = '0';
+                setTimeout(() => toast.parentNode.removeChild(toast), 300);
+            }, 2800);
+        }
+        
+        // Mobile menu
+        function initMobileMenu() {
+            const btn = document.getElementById('mobile-menu-btn');
+            btn.addEventListener('click', () => {
+                const nav = document.createElement('div');
+                nav.className = `fixed inset-0 bg-slate-950 z-[60] p-6 md:hidden`;
+                nav.innerHTML = `
+                    <div class="flex justify-between items-center">
+                        <div class="flex items-center gap-x-3">
+                            <div class="w-9 h-9 bg-indigo-600 rounded-2xl flex items-center justify-center">
+                                <i class="fa-solid fa-infinity text-white text-2xl"></i>
+                            </div>
+                            <span class="font-display text-3xl font-semibold">vesper</span>
+                        </div>
+                        <button class="text-3xl">&times;</button>
+                    </div>
+                    
+                    <div class="mt-12 flex flex-col gap-y-2 text-lg">
+                        <a href="#features" class="py-4 px-1 border-b border-slate-800">Features</a>
+                        <a href="#demo" class="py-4 px-1 border-b border-slate-800">Demo</a>
+                        <a href="#pricing" class="py-4 px-1 border-b border-slate-800">Pricing</a>
+                    </div>
+                    
+                    <div class="mt-auto absolute bottom-8 left-6 right-6">
+                        <button onclick="startFreeTrial(); document.body.removeChild(this.closest('.fixed'))" 
+                                class="w-full py-4 bg-white text-slate-900 font-semibold rounded-3xl">
+                            Start free trial
+                        </button>
+                    </div>
+                `;
+                
+                document.body.appendChild(nav);
+                
+                nav.querySelector('button').addEventListener('click', () => {
+                    document.body.removeChild(nav);
+                });
+            });
+        }
+        
+        // Initialize everything
+        function initializeWebsite() {
+            initializeTailwind();
+            initNavbar();
+            initDemo();
+            initMobileMenu();
+            
+            // Keyboard hint
+            console.log('%c[Vesper] Website initialized successfully. Press "/" to add a task in the demo.', 'color:#64748b');
+        }
+        
+        // Boot the website
+        window.onload = initializeWebsite;
+    </script>
+</body>
+</html>
